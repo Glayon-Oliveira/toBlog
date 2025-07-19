@@ -1,0 +1,45 @@
+CREATE TABLE category (
+    id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    slug VARCHAR(100) NOT NULL UNIQUE,
+    parent_id INT UNSIGNED,
+    FOREIGN KEY (parent_id) REFERENCES category(id) ON DELETE CASCADE
+);
+
+CREATE TABLE post (
+    id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL UNIQUE,
+    summary VARCHAR(255) NULL,
+    img_url VARCHAR(1024) NULL,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL
+);
+
+CREATE TABLE content (
+    id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    post_id INT UNSIGNED NOT NULL,
+    order_index INT UNSIGNED NOT NULL,
+    content_type VARCHAR(20) NOT NULL,
+    body TEXT NOT NULL,
+    
+    FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE
+);
+
+CREATE TABLE content_metadata(
+	id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+	content_id INT UNSIGNED NOT NULL,
+	meta_type VARCHAR(20) NOT NULL,
+	meta_content VARCHAR(255) NOT NULL,
+	
+	FOREIGN KEY content_id REFERENCES content(id)
+);
+
+CREATE TABLE post_category (
+    id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    post_id INT UNSIGNED NOT NULL,
+    category_id INT UNSIGNED NOT NULL,
+    UNIQUE (post_id, category_id),
+    FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES category(id) ON DELETE CASCADE
+);
