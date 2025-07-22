@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "categories")
+@Table(name = "category")
 public class Category {
 
 	@Id
