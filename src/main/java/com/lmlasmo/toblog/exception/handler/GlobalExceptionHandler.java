@@ -15,6 +15,7 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.ServerWebInputException;
 
 import com.lmlasmo.toblog.exception.InvalidParentCategoryException;
+import com.lmlasmo.toblog.exception.InvalidValueException;
 import com.lmlasmo.toblog.exception.NotFoundException;
 import com.lmlasmo.toblog.exception.ValueAlreadyExistsException;
 
@@ -37,6 +38,12 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(exception = {InvalidParentCategoryException.class})
 	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
 	public Map<String, String> handlerInvalidParentCategoryException(InvalidParentCategoryException ex, ServerWebExchange exchange){
+		return bodyError(HttpStatus.BAD_REQUEST, exchange, Map.of("message", ex.getMessage()));
+	}
+
+	@ExceptionHandler(exception = {InvalidValueException.class})
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+	public Map<String, String> handlerInvalidValuException(InvalidValueException ex, ServerWebExchange exchange){
 		return bodyError(HttpStatus.BAD_REQUEST, exchange, Map.of("message", ex.getMessage()));
 	}
 
