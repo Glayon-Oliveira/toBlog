@@ -1,0 +1,43 @@
+CREATE TABLE category (
+    id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name VARCHAR2(100) NOT NULL UNIQUE,
+    slug VARCHAR2(100) NOT NULL UNIQUE,
+    parent_id NUMBER,
+    FOREIGN KEY (parent_id) REFERENCES category(id) ON DELETE CASCADE
+);
+
+CREATE TABLE post (
+    id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    title VARCHAR2(255) NOT NULL,
+    slug VARCHAR2(255) NOT NULL UNIQUE,
+    summary VARCHAR2(255) NULL,
+    img_url VARCHAR2(1024) NULL,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL
+);
+
+CREATE TABLE content (
+    id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    post_id NUMBER NOT NULL,
+    order_index NUMBER NOT NULL,
+    content_type VARCHAR2(20) NOT NULL,
+    body CLOB NOT NULL,
+    FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE
+);
+
+CREATE TABLE content_metadata(
+    id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    content_id NUMBER NOT NULL,
+    meta_type VARCHAR2(20) NOT NULL,
+    meta_content VARCHAR2(255) NOT NULL,
+    FOREIGN KEY (content_id) REFERENCES content(id)
+);
+
+CREATE TABLE post_category (
+    id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    post_id NUMBER NOT NULL,
+    category_id NUMBER NOT NULL,
+    UNIQUE (post_id, category_id),
+    FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES category(id) ON DELETE CASCADE
+);
